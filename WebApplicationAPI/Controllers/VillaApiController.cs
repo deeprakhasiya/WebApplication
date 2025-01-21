@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebApplicationAPI.Data;
 using WebApplicationAPI.Models;
+using WebApplicationAPI.Models.DTO;
 
 namespace WebApplicationAPI.Controllers
 {
@@ -8,11 +10,28 @@ namespace WebApplicationAPI.Controllers
     public class VillaApiController : ControllerBase
     {
         [HttpGet]
-        public IEnumerable<Villa> GetVillas() {
-            return new List<Villa> {
-                new Villa { Id = 1,Name = "Villa1" } ,
-                new Villa { Id = 2, Name = "Villa2" }
-            }; 
+        public IEnumerable<VillaDTO> GetVillas() {
+            return VillaStore.VillaList;
+        }
+
+        [HttpGet("id")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public ActionResult<VillaDTO> GetVilla(int id)
+        {
+            if ( id == 0)
+            {
+                return BadRequest();
             }
+            var villa = VillaStore.VillaList.FirstOrDefault(u => u.Id == id);
+            
+            if( villa == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(villa);
+        }
     }
 }
