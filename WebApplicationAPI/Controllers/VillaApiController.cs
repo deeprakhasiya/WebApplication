@@ -55,5 +55,55 @@ namespace WebApplicationAPI.Controllers
 
             return Ok(villobj);
         }
+
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult DeleteVilla(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest();
+            }
+
+            var villa = VillaStore.VillaList.FirstOrDefault(u => u.Id == id);
+
+            if (villa == null)
+            {
+                return NotFound();
+            }
+
+            VillaStore.VillaList.Remove(villa);
+
+            return Ok($"Villa with ID {id} has been deleted.");
+        }
+
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult UpdateVilla(int id, [FromBody] VillaDTO updatedVilla)
+        {
+            if (updatedVilla == null || id != updatedVilla.Id)
+            {
+                return BadRequest();
+            }
+
+            var existingVilla = VillaStore.VillaList.FirstOrDefault(u => u.Id == id);
+
+            if (existingVilla == null)
+            {
+                return NotFound();
+            }
+
+            existingVilla.Name = updatedVilla.Name;
+            existingVilla.Sqft = updatedVilla.Sqft;
+            existingVilla.Occupancy = updatedVilla.Occupancy;
+
+            return Ok(existingVilla);
+        }
+
+
     }
 }
