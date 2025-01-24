@@ -7,6 +7,7 @@ namespace WebApplicationAPI.Controllers
 {
     [Route("/api/VillaAPI")]
     [ApiController]
+    //https://localhost:7139/swagger/index.html
     public class VillaApiController : ControllerBase
     {
         [HttpGet]
@@ -94,7 +95,9 @@ namespace WebApplicationAPI.Controllers
 
             if (existingVilla == null)
             {
-                return NotFound();
+                updatedVilla.Id = VillaStore.VillaList.OrderByDescending(u => u.Id).FirstOrDefault().Id + 1;
+                VillaStore.VillaList.Add(updatedVilla);
+                return Ok($"Villa with ID {id} not found. A new villa has been created.");
             }
 
             existingVilla.Name = updatedVilla.Name;
