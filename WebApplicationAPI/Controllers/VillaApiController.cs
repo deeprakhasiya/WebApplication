@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WebApplicationAPI.Data;
 using WebApplicationAPI.Models;
 using WebApplicationAPI.Models.DTO;
 
 namespace WebApplicationAPI.Controllers
 {
+    [Authorize]
     [Route("/api/VillaAPI")]
     [ApiController]
     //https://localhost:7139/swagger/index.html
